@@ -1,0 +1,161 @@
+@import 'tailwindcss';
+
+body {
+  font-family: 'Arial', sans-serif;
+  color: #545454;
+}
+
+.container {
+  padding-inline: 1rem;
+  margin-inline: auto;
+}
+
+/* .navigation-drawer {
+  min-height: 100vh;
+  width: 200px;
+  padding: 20px 10px;
+  background-color: #fff;
+
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+
+  box-shadow: 0 0 4px 2px #00000033;
+  transform: translateX(-100%);
+  transition: transform 350ms;
+
+  z-index: 9999;
+} */
+
+/* .navigation-drawer.open {
+  transform: translateX(0);
+} */
+
+/* .drawer-button {
+  padding: 8px;
+  border: 0;
+  border-radius: 4px;
+
+  display: inline-block;
+  background-color: transparent;
+
+  font-weight: bold;
+  font-size: 28px;
+  color: #fff;
+
+  cursor: pointer;
+}
+
+.nav-list {
+  list-style: none;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px 20px;
+}
+
+.nav-list li a,
+.nav-list li button {
+  padding: 6px 10px;
+
+  display: block;
+
+  color: #545454;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.nav-list li a:hover,
+.nav-list li button:hover {
+  text-decoration: underline;
+} */
+
+/* Write your styles more here */
+
+/* @media screen and (width > 1000px) {
+  .navigation-drawer {
+    min-height: auto;
+    width: auto;
+    padding: 0;
+    background-color: transparent;
+
+    flex-direction: row;
+    justify-content: space-between;
+
+    position: static;
+    box-shadow: none;
+    transform: translateX(0);
+  }
+
+  .nav-list {
+    flex-direction: row;
+  }
+
+  .nav-list li a,
+  .nav-list li button {
+    display: inline-block;
+    color: #fff;
+  }
+
+  .drawer-button {
+    display: none;
+  }
+} */
+
+@keyframes move-out {
+  from {
+    transform: translateX(0%);
+  }
+
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes move-in {
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0%);
+  }
+}
+
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root) {
+  animation-name: move-out;
+  animation-duration: 500ms;
+}
+
+::view-transition-new(root) {
+  animation-name: move-in;
+  animation-duration: 500ms;
+}
+
+::view-transition-group(story-image) {
+  animation-duration: 500ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+.main-header {
+  view-transition-name: main-header;
+}
+
+.main-footer {
+  view-transition-name: main-footer;
+}
+
+.story-detail-image {
+  view-transition-name: story-image;
+}

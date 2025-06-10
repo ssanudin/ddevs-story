@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="dDevs Story - Share your stories with photos and locations."
+    />
+    <meta name="theme-color" content="#0069A8" />
+    <link rel="shortcut icon" href="/favicon.png" />
+    <title>dDevs Story</title>
+
+    <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="shortcut icon" href="favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/ios/180.png" />
+    <link rel="manifest" href="app.webmanifest" />
+
+    <script type="module" src="/scripts/index.js"></script>
+  </head>
+  <body class="flex flex-col min-h-screen bg-gray-100">
+    <header class="main-header bg-sky-700 shadow-md">
+      <button
+        type="button"
+        id="skip-to-content"
+        class="sr-only focus:not-sr-only! focus:absolute! focus:top-4! focus:left-4! focus:bg-white! focus:text-sky-700! focus:px-4! focus:py-2! focus:rounded-md! focus:shadow-lg! focus:z-50! hover:cursor-pointer"
+        aria-label="Skip to main content"
+      >
+        Skip to main content
+      </button>
+      <div class="flex justify-between items-center py-[20px] container max-w-2xl">
+        <div class="left-content flex items-center">
+          <a
+            href="/#/back"
+            id="back-button"
+            class="text-white text-xl mr-4 p-2 hover:cursor-pointer hidden"
+            aria-label="Go back"
+          >
+            <i class="fa-solid fa-arrow-left"></i>
+          </a>
+          <h1 id="page-name" class="text-white font-bold text-2xl">dDevs Story</h1>
+        </div>
+
+        <div id="profile-btn-wrapper" class="relative text-left hidden">
+          <button
+            id="profile-btn"
+            type="button"
+            class="flex items-center rounded-full bg-sky-700 px-3 py-1.5 text-white focus:outline-none focus:ring-2 focus:ring-sky-500 hover:cursor-pointer"
+          >
+            <img src="https://i.pravatar.cc/40" alt="Profile" class="w-8 h-8 rounded-full" />
+            <span class="text-sm hidden sm:inline ms-1">My Profile</span>
+          </button>
+
+          <div
+            id="dropdown-menu"
+            class="hidden absolute right-0 mt-2 w-40 origin-top-right rounded-md shadow-lg bg-white ring-1 ring-gray-700 ring-opacity-5 z-[500]"
+          >
+            <div class="p-1">
+              <a
+                href="/#/saved-story"
+                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-sky-700"
+              >
+                <i class="fa-solid fa-book-bookmark"></i>
+                Saved Story
+              </a>
+            </div>
+            <hr class="my-1 border-gray-300" />
+            <div class="p-1">
+              <a
+                href="/#/logout"
+                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-red-400"
+              >
+                <i class="fa-solid fa-right-from-bracket"></i>
+                Logout
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main id="main-content" class="flex-1 bg-white w-full max-w-3xl mx-auto pb-24"></main>
+
+    <footer class="main-footer">
+      <nav
+        id="nav-list"
+        class="flex justify-around items-center bg-white text-sky-700 border border-sky-700 text-center py-3 fixed bottom-10 left-1/2 transform -translate-x-1/2 w-[95%] max-w-md rounded-3xl shadow-lg/35 z-[1050]"
+      ></nav>
+
+      <div class="bg-sky-700 text-center text-xs text-white py-1">
+        <p>&copy; 2025. dDevs Story - Share your stories with photos and locations.</p>
+      </div>
+    </footer>
+  </body>
+</html>
