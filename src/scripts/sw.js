@@ -5,46 +5,9 @@ import { NetworkFirst, CacheFirst, StaleWhileRevalidate } from 'workbox-strategi
 import { ExpirationPlugin } from 'workbox-expiration';
 import { API_ORIGIN } from './config';
 
-const manifest = self.__WB_MANIFEST;
-precacheAndRoute(manifest);
+precacheAndRoute(self.__WB_MANIFEST);
 
 // Runtime caching
-
-// Cache the web manifest file
-registerRoute(
-  ({ url }) => url.pathname === '/app.webmanifest',
-  new CacheFirst({
-    cacheName: 'app-manifest',
-  })
-);
-
-// Cache images in the public images folder
-registerRoute(
-  ({ url }) => url.pathname.startsWith('/images/'),
-  new CacheFirst({
-    cacheName: 'public-images',
-    plugins: [
-      new ExpirationPlugin({
-        maxEntries: 150,
-        maxAgeSeconds: 30 * 24 * 60 * 60,
-      }),
-    ],
-  })
-);
-
-// Cache favicons explicitly
-registerRoute(
-  ({ url }) => url.pathname === '/favicon.ico' || url.pathname.startsWith('/favicon-'),
-  new CacheFirst({
-    cacheName: 'favicons',
-    plugins: [
-      new ExpirationPlugin({
-        maxEntries: 10,
-        maxAgeSeconds: 30 * 24 * 60 * 60,
-      }),
-    ],
-  })
-);
 
 // Avatar icons from UI Avatars: Uses CacheFirst because the data does not change often and ensures stored data only with status code 0 to 200.
 registerRoute(
@@ -56,6 +19,10 @@ registerRoute(
     plugins: [
       new CacheableResponsePlugin({
         statuses: [0, 200],
+      }),
+      new ExpirationPlugin({
+        maxEntries: 50,
+        maxAgeSeconds: 1 * 24 * 60 * 60,
       }),
     ],
   })
@@ -72,6 +39,12 @@ registerRoute(
   new NetworkFirst({
     cacheName: 'story-api',
     networkTimeoutSeconds: 3,
+    plugins: [
+      new ExpirationPlugin({
+        maxEntries: 50,
+        maxAgeSeconds: 1 * 24 * 60 * 60,
+      }),
+    ],
   })
 );
 
@@ -94,37 +67,37 @@ registerRoute(
   })
 );
 
-// // Reverse geocoding from maptiler API: Uses CacheFirst because the data does not change often.
-// registerRoute(
-//   ({ url }) => {
-//     return url.origin.includes('maptiler');
-//   },
-//   new CacheFirst({
-//     cacheName: 'maptiler-api',
-//   })
-// );
-
-self.addEventListener('activate', (event) => {
-  event.waitUntil(self.clients.claim());
-});
+// self.addEventListener('message', (event) => {
+//   // do the skipWaiting() with user interaction
+//   if (event.data && event.data.type === 'SKIP_WAITING') {
+//     self.skipWaiting();
+//   }
+// });
 
 self.addEventListener('install', (event) => {
   event.waitUntil(self.skipWaiting());
 });
 
+self.addEventListener('activate', (event) => {
+  event.waitUntil(self.clients.claim());
+});
+
 self.addEventListener('push', (event) => {
-  async function chainPromise() {
+  async function showNotification() {
     try {
       const data = await event.data.json();
       await self.registration.showNotification(data.title, {
         body: data.options.body,
+        icon: '/images/logo.png',
       });
     } catch (e) {
       const text = event.data ? event.data.text() : 'You have a new message';
       await self.registration.showNotification('New message', {
         body: text,
+        icon: '/images/logo.png',
       });
     }
   }
-  event.waitUntil(chainPromise());
+
+  event.waitUntil(showNotification());
 });

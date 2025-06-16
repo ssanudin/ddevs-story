@@ -9,15 +9,14 @@ export async function registerServiceWorker() {
   }
 
   try {
-    const registration = await navigator.serviceWorker.register('/sw.js', { type: 'module' });
-    console.log('Service Worker registered, scope:', registration.scope);
+    const registration = await navigator.serviceWorker.register('/sw.js');
+    // console.log('Service Worker registered, scope:', registration.scope);
 
-    // Optionally listen for new worker state changes:
     registration.addEventListener('updatefound', () => {
       const newSW = registration.installing;
-      newSW?.addEventListener('statechange', () => {
-        if (newSW.state === 'installed' && navigator.serviceWorker.controller) {
-          console.log('New SW installed - reloading');
+      newSW.addEventListener('statechange', () => {
+        if (newSW.state === 'installed' && registration.waiting) {
+          // do the user interaction about the update is better
           window.location.reload();
         }
       });

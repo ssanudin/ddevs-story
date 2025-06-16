@@ -20,6 +20,7 @@ export async function requestNotificationPermission() {
   }
 
   const status = await Notification.requestPermission();
+
   if (status === 'denied') {
     notifAutoClose.fire({
       icon: 'error',
@@ -28,6 +29,7 @@ export async function requestNotificationPermission() {
     });
     return false;
   }
+
   if (status === 'default') {
     notifAutoClose.fire({
       icon: 'error',
@@ -40,12 +42,8 @@ export async function requestNotificationPermission() {
   return true;
 }
 
-export async function getRegistration() {
-  return await navigator.serviceWorker.getRegistration('');
-}
-
 export async function getPushSubscription() {
-  const registration = await getRegistration();
+  const registration = await navigator.serviceWorker.ready;
   return await registration?.pushManager.getSubscription();
 }
 
@@ -76,7 +74,7 @@ export async function subscribe(token) {
 
   let pushSubscription;
   try {
-    const registration = await getRegistration();
+    const registration = await navigator.serviceWorker.ready;
     pushSubscription = await registration.pushManager.subscribe(generateSubscribeOptions());
     const { endpoint, keys } = pushSubscription.toJSON();
 
@@ -97,7 +95,7 @@ export async function subscribe(token) {
         ? (await error.response.json()).message
         : typeof error === 'string'
           ? error
-          : 'Terjadi kesalahan';
+          : error.message || 'Something went wrong';
     console.error('subscribe: error:', errorMsg);
 
     await pushSubscription.unsubscribe();
@@ -133,7 +131,7 @@ export async function unsubscribe(token) {
     const unsubscribed = await pushSubscription.unsubscribe();
     if (!unsubscribed) {
       await subscribePushNotification({ subscribeStatus: true, token, params: { endpoint, keys } });
-      throw new Error('Langganan push notification gagal dinonaktifkan.');
+      throw new Error('Push notification subscription failed to deactivate.');
     }
 
     notifAutoClose.fire({
@@ -147,13 +145,13 @@ export async function unsubscribe(token) {
         ? (await error.response.json()).message
         : typeof error === 'string'
           ? error
-          : error.message || 'Terjadi kesalahan';
+          : error.message || 'Something went wrong';
     console.error('unsubscribe: error:', errorMsg);
 
     notifAutoClose.fire({
       icon: 'error',
       title: 'Unsubscribe Failed',
-      text: errorMsg || 'Push notification subscription deactivation failed.',
+      text: errorMsg || 'Push notification subscription failed to deactivate.',
     });
   }
 }

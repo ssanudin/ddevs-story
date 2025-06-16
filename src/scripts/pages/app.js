@@ -9,6 +9,12 @@ import {
 import { isServiceWorkerAvailable } from '../utils/register-sw';
 import { getAuth, isLoggedIn, logout } from '../utils/auth';
 import { isCurrentPushSubscriptionAvailable, subscribe, unsubscribe } from '../utils/notification';
+import {
+  generateDropdownMenu,
+  generateMainNavMenu,
+  generateProfileBtnContent,
+  generateSubscribeBtnContent,
+} from '../template';
 
 class App {
   #content = null;
@@ -63,33 +69,40 @@ class App {
     }
   }
 
+  async #setupNav() {
+    if (isLoggedIn()) {
+      if (this.#navList.innerHTML === '') {
+        this.#navList.innerHTML = generateMainNavMenu(
+          await isCurrentPushSubscriptionAvailable(),
+          !isServiceWorkerAvailable()
+        );
+      }
+      if (this.#profileBtn.innerHTML === '') {
+        this.#profileBtn.innerHTML = generateProfileBtnContent(getAuth('name'));
+      }
+      if (this.#dropdownMenu.innerHTML === '') {
+        this.#dropdownMenu.innerHTML = generateDropdownMenu();
+      }
+
+      this.#navList.classList.remove('hidden');
+      this.#profileBtnWrapper.classList.remove('hidden');
+    } else {
+      this.#navList.classList.add('hidden');
+      this.#navList.innerHTML = '';
+
+      this.#profileBtnWrapper.classList.add('hidden');
+      this.#profileBtn.innerHTML = '';
+      this.#dropdownMenu.innerHTML = '';
+    }
+  }
+
   async renderPage() {
     if (isLoggedIn()) {
       if (!this.#token) {
         this.#token = getAuth('token');
       }
-
-      this.#profileBtnWrapper.classList.remove('hidden');
-      this.#navList.innerHTML = `
-        <a href="/#/" class="flex flex-col items-center text-xs hover:underline">
-          <i class="fa-solid fa-house h-[1.5rem]! mb-1"></i>
-          Home
-        </a>
-        <a href="/#/add-story" class="flex flex-col items-center text-xs hover:underline">
-          <i class="fa-solid fa-circle-plus h-[1.5rem]! mb-1"></i>
-          Add Story
-        </a>
-        <button type="button" id="subscribe-btn" data-text="subscribe" class="flex flex-col items-center text-xs hover:underline hover:cursor-pointer disabled:text-gray-400"${isServiceWorkerAvailable() ? '' : ' disabled'} >
-          <i class="fa-solid fa-bell h-[1.5rem]! mb-1"></i>
-          Subscribe
-        </button>
-      `;
-      this.#navList.classList.remove('hidden');
-    } else {
-      this.#profileBtnWrapper.classList.add('hidden');
-      this.#navList.innerHTML = '';
-      this.#navList.classList.add('hidden');
     }
+    this.#setupNav();
 
     const url = getActiveRoute();
     const page = routes[url] || routes['/404'];
@@ -205,9 +218,7 @@ class App {
     }
 
     const isSubscribed = await isCurrentPushSubscriptionAvailable();
-    subscribeBtn.innerHTML = isSubscribed
-      ? '<i class="fa-solid fa-bell-slash h-[1.5rem]! mb-1"></i> Unsubscribe'
-      : '<i class="fa-solid fa-bell h-[1.5rem]! mb-1"></i> Subscribe';
+    subscribeBtn.innerHTML = generateSubscribeBtnContent(isSubscribed);
     subscribeBtn.setAttribute('data-text', isSubscribed ? 'unsubscribe' : 'subscribe');
     subscribeBtn.removeAttribute('disabled');
 

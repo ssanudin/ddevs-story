@@ -24,6 +24,7 @@ export default defineConfig({
       injectManifest: {
         swSrc: resolve(__dirname, 'src', 'scripts', 'sw.js'),
         swDest: 'dist/sw.js',
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,webp}', 'app.webmanifest'],
       },
 
       injectRegister: false,
@@ -32,6 +33,7 @@ export default defineConfig({
       workbox: {
         skipWaiting: true,
         clientsClaim: true,
+        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
       },
 
       devOptions: {

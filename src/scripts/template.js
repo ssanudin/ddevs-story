@@ -83,3 +83,56 @@ export function generateBookmarkBtnContent(isBookmarked) {
     ${isBookmarked ? 'Saved' : 'Save story'}
   `;
 }
+
+export function generateMainNavMenu(isSubscribed, subscribeBtnDisabled) {
+  return `
+    <a href="/#/" class="flex flex-col items-center text-xs hover:underline">
+      <i class="fa-solid fa-house h-[1.5rem]! mb-1"></i>
+      Home
+    </a>
+    <a href="/#/add-story" class="flex flex-col items-center text-xs hover:underline">
+      <i class="fa-solid fa-circle-plus h-[1.5rem]! mb-1"></i>
+      Add Story
+    </a>
+    <button type="button" id="subscribe-btn" data-text="${isSubscribed ? 'unsubscribe' : 'subscribe'}" class="flex flex-col items-center text-xs hover:underline hover:cursor-pointer disabled:text-gray-400"${subscribeBtnDisabled ? 'disabled' : ' '} >
+      ${generateSubscribeBtnContent(isSubscribed)}
+    </button>
+  `;
+}
+
+export function generateSubscribeBtnContent(isSubscribed) {
+  return isSubscribed
+    ? '<i class="fa-solid fa-bell-slash h-[1.5rem]! mb-1"></i> Unsubscribe'
+    : '<i class="fa-solid fa-bell h-[1.5rem]! mb-1"></i> Subscribe';
+}
+
+export function generateProfileBtnContent(name = 'My Profile') {
+  return `
+    <img src="https://i.pravatar.cc/40" alt="${name}" class="w-8 h-8 rounded-full" />
+    <span class="text-sm hidden sm:inline ms-1">${name}</span>
+  `;
+}
+
+export function generateDropdownMenu() {
+  return `
+    <div class="p-1">
+      <a
+        href="/#/saved-story"
+        class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-sky-700"
+      >
+        <i class="fa-solid fa-book-bookmark"></i>
+        Saved Story
+      </a>
+    </div>
+    <hr class="my-1 border-gray-300" />
+    <div class="p-1">
+      <a
+        href="/#/logout"
+        class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-red-400"
+      >
+        <i class="fa-solid fa-right-from-bracket"></i>
+        Logout
+      </a>
+    </div>
+  `;
+}

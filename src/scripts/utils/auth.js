@@ -10,14 +10,15 @@ function isStorageExist() {
   return true;
 }
 
-export function isLoggedIn() {
+export function isLoggedIn(thereIsToken = false) {
   const token = getAuth('token');
   const time = getAuth('time');
 
-  if (!token || !time) return false;
+  if (thereIsToken && !token && !time) {
+    return 'nodata';
+  }
 
-  if (Date.now() - time > AUTH_MAX_AGE) {
-    logout();
+  if (!token || !time || Date.now() - time > AUTH_MAX_AGE) {
     return false;
   }
 
@@ -34,12 +35,19 @@ export function setAuth({ name, userId, token }) {
 }
 
 export function getAuth(key) {
-  if (!['name', 'userId', 'token', 'time'].includes(key)) return null;
+  if (!['name', 'userId', 'user', 'token', 'time'].includes(key)) return null;
   if (!isStorageExist()) return null;
 
-  if (['name', 'userId'].includes(key)) {
+  if (['name', 'userId', 'user'].includes(key)) {
     const raw = localStorage.getItem(LOCAL_KEY_USER);
-    return raw ? JSON.parse(raw) : null;
+    if (!raw) {
+      return null;
+    }
+    if (key === 'user') {
+      return JSON.parse(raw);
+    }
+
+    return JSON.parse(raw)[key];
   } else if (key === 'token') {
     return localStorage.getItem(LOCAL_KEY_TOKEN) || null;
   } else if (key === 'time') {

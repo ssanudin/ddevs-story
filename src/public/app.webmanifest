@@ -1,6 +1,6 @@
 {
-  "id": "/#/",
-  "start_url": "/#/",
+  "id": "/",
+  "start_url": "/",
   "scope": "/",
   "name": "dDevs Story App",
   "short_name": "dDevs Story",
@@ -28,29 +28,29 @@
       "form_factor": "wide"
     },
     {
-      "src": "images/screenshots/dDevsStory_004.png",
+      "src": "images/screenshots/dDevsStory_004.jpeg",
       "sizes": "540x1200",
-      "type": "image/png",
+      "type": "image/jpeg",
       "form_factor": "narrow"
     },
     {
-      "src": "images/screenshots/dDevsStory_005.png",
+      "src": "images/screenshots/dDevsStory_005.jpeg",
       "sizes": "540x1200",
-      "type": "image/png",
+      "type": "image/jpeg",
       "form_factor": "narrow"
     },
     {
-      "src": "images/screenshots/dDevsStory_006.png",
+      "src": "images/screenshots/dDevsStory_006.jpeg",
       "sizes": "540x1200",
-      "type": "image/png",
+      "type": "image/jpeg",
       "form_factor": "narrow"
     }
   ],
   "shortcuts": [
     {
-      "name": "Tambah Story",
-      "short_name": "Tambah",
-      "description": "Bagi cerita kamu dengan foto dan lokasi.",
+      "name": "Add Story",
+      "short_name": "Add Story",
+      "description": "Share your stories with photos and locations.",
       "url": "/#/add-story",
       "icons": [
         {

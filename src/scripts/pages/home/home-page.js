@@ -1,4 +1,4 @@
-import { getStories } from '../../data/api';
+import { getApiUrl, getStories } from '../../data/api';
 import { generateStoryItemTemplate } from '../../template';
 import { notifAutoClose } from '../../utils';
 import { getAuth, isLoggedIn, logout } from '../../utils/auth';
@@ -20,7 +20,7 @@ export default class HomePage {
   async afterRender() {
     this.#presenter = new HomePresenter({
       view: this,
-      apiModel: { getStories, isLoggedIn, getAuth },
+      apiModel: { getStories, isLoggedIn, getAuth, getApiUrl },
     });
 
     this.#observer = new IntersectionObserver(
@@ -87,7 +87,12 @@ export default class HomePage {
     });
   }
 
-  renderSessionExpired() {
+  renderSessionExpired(neverLogin = false) {
+    if (neverLogin) {
+      logout();
+      return;
+    }
+
     notifAutoClose
       .fire({
         icon: 'warning',

@@ -17,8 +17,9 @@ export default class HomePresenter {
     if (this.#loading) return;
     this.#loading = true;
 
-    if (!this.#apiModel.isLoggedIn()) {
-      this.#view.renderSessionExpired();
+    const loginStatus = this.#apiModel.isLoggedIn(true);
+    if (!loginStatus || loginStatus === 'nodata') {
+      this.#view.renderSessionExpired(loginStatus === 'nodata' ? true : false);
       return;
     } else if (!this.#token) {
       this.#token = await this.#apiModel.getAuth('token');
@@ -55,7 +56,7 @@ export default class HomePresenter {
     } catch (networkError) {
       console.warn('Network failed, trying cache…', networkError);
 
-      const url = `${getApiUrl('stories')}?page=${this.#page}&size=${this.size}&location=0`;
+      const url = `${this.#apiModel.getApiUrl('stories')}?page=${this.#page}&size=${this.size}&location=0`;
       const cache = await caches.open('story-api');
       const cachedResp = await cache.match(url);
       if (cachedResp) {
